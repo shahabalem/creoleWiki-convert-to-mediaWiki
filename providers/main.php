@@ -31,7 +31,7 @@ while($obj -> fetchRow()){
         $obj -> $parse();
 
 
-        //continue;
+//        continue;
         //find redirect page and set special content for it
         $obj -> redirectPage();
 
