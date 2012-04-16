@@ -36,16 +36,16 @@ while($obj -> fetchRow()){
         $obj -> redirectPage();
 
         //find tags that assign to each page
-//        $obj -> findTag();
+        $obj -> findTag();
 
         //find categorys that assign to each page
-//        $obj -> findCategory();
+        $obj -> findCategory();
 
         //create page and send content to page use of mediawiki api
         $obj -> createPage();
 
         //insert category to temp table of database for future
-//        $obj -> parseCategorys();
+        $obj -> parseCategorys();
     } else {
 //        continue;
         if ($count++ == 100)
@@ -54,5 +54,5 @@ while($obj -> fetchRow()){
     
 }
 
-//$obj -> createCategorys();
+$obj -> createCategorys();
 

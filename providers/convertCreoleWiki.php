@@ -193,11 +193,8 @@ class convertCreoleWiki
         $stmt ->execute();
         $tags = $stmt ->fetchAll();
 
-        
-
         $tagContent = 'کلید واژه: ';
         if (count($tags) != 0){
-
 
             foreach ($tags as $tag){
                 $tagContent .= '[[' . $tag -> name . "]] ،";
@@ -283,7 +280,6 @@ class convertCreoleWiki
 
         include_once 'botclasses.php';
         $obj = new lyricwiki(null,null,'http://localhost/mediawiki/api.php');
-
 
         foreach ($this-> categorylist As $category){
                     $obj -> addcategory ($category -> page, $category -> parent);

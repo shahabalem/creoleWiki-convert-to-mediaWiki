@@ -88,6 +88,7 @@ class parseCreole {
                     $matchesarray[6][] = $matches[12][$key];
                     $matchesarray[6][] = $matches[12][$key];
                 }
+                $refrences[1] = preg_replace($pattern, "", $refrences[1],1);
             }
             //var_dump($matchesarray);
             $text = preg_replace("/پي نوشت|پی نوشت(.*)/s", "", $content);
@@ -113,7 +114,7 @@ class parseCreole {
             
             $refrences[1] = preg_replace("#(\s|\n){2}#", "\n", $refrences[1]);
             $refrences[1] = preg_replace("/پي نوشت|پی نوشت/", "", $refrences[1]);
-            return $text . "==پانویس ==\n<references />" . "\n\n" . $refrences[1];
+            return $text . "==پانویس ==\n<references />" . "\n\n\n\n" . $refrences[1];
         }
         //return $content;
     }
