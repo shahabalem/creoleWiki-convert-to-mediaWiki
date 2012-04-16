@@ -73,7 +73,8 @@ class convertCreoleWiki
                     a.version = 
                         (SELECT max(version) FROM `WikiPage` 
                          WHERE resourcePrimKey = a.resourcePrimKey)  
-                GROUP BY a.resourcePrimKey";
+                GROUP BY a.resourcePrimKey
+                limit 200,400";
 
 
 //
@@ -192,8 +193,12 @@ class convertCreoleWiki
         $stmt ->execute();
         $tags = $stmt ->fetchAll();
 
+        
+
         $tagContent = 'کلید واژه: ';
         if (count($tags) != 0){
+
+
             foreach ($tags as $tag){
                 $tagContent .= '[[' . $tag -> name . "]] ،";
                 $this -> _mediaWikiContent -> subCategory[] = $tag -> name;
@@ -279,17 +284,9 @@ class convertCreoleWiki
         include_once 'botclasses.php';
         $obj = new lyricwiki(null,null,'http://localhost/mediawiki/api.php');
 
+
         foreach ($this-> categorylist As $category){
-                if ($obj -> getpage($category -> page))
                     $obj -> addcategory ($category -> page, $category -> parent);
-                else{
-                    /*
-                     * use if want to create all sub pages
-                     * this part create free page and add category in it
-                     */
-                    $obj -> edit($category -> page, " ");
-                    $obj -> addcategory ($category -> page, $category -> parent);
-                }
         }
     }
 }
