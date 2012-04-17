@@ -18,10 +18,12 @@ include_once 'botclasses.php';
 include_once 'convertCreoleWiki.php';
 
 //echo phpinfo();exit;
+
 /*** start the main program ***/
 $obj = convertCreoleWiki::getInstance();
 $obj -> createQuary();
 $count = 0;
+
 while($obj -> fetchRow()){
 
     if ($parse = $obj -> Rowformat()){
@@ -30,14 +32,13 @@ while($obj -> fetchRow()){
         $parse = 'parse'. ucfirst(strtolower($parse));
         $obj -> $parse();
 
-
 //        continue;
         //find redirect page and set special content for it
         $obj -> redirectPage();
 
         //find tags that assign to each page
         $obj -> findTag();
-
+//        continue;
         //find categorys that assign to each page
         $obj -> findCategory();
 
@@ -46,12 +47,11 @@ while($obj -> fetchRow()){
 
         //insert category to temp table of database for future
         $obj -> parseCategorys();
-    } else {
+    
 //        continue;
         if ($count++ == 100)
             break;
     }
-    
 }
 
 $obj -> createCategorys();

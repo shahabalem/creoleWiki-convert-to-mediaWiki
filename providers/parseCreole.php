@@ -31,7 +31,7 @@ class parseCreole {
 
     function parseContent($content){
 
-
+       
         $content = $this ->parseLinks($content);
 
         //delete extra brachet from text and link
@@ -90,10 +90,12 @@ class parseCreole {
                 }
                 $refrences[1] = preg_replace($pattern, "", $refrences[1],1);
             }
-            //var_dump($matchesarray);
-            $text = preg_replace("/پي نوشت|پی نوشت(.*)/s", "", $content);
-            
-            //echo $text. '<hr>';
+
+            $pattern = "/پي نوشت|پی نوشت(.*)/s";
+            if (preg_match($pattern, $content))
+                $text = preg_replace($pattern, "", $content);
+            else
+                return $content;
             
             if(isset ($matchesarray)){
                 foreach ($matchesarray[3] as $key => $ref) {
@@ -108,15 +110,14 @@ class parseCreole {
                         echo "";
                     }
                 }
-                //echo $text . "<hr>";
-//                var_dump($matchesarray);
             }
-            
+
             $refrences[1] = preg_replace("#(\s|\n){2}#", "\n", $refrences[1]);
             $refrences[1] = preg_replace("/پي نوشت|پی نوشت/", "", $refrences[1]);
+            
             return $text . "==پانویس ==\n<references />" . "\n\n\n\n" . $refrences[1];
         }
-        //return $content;
+        return $content;
     }
 
     /*

@@ -54,12 +54,7 @@ class convertCreoleWiki
             die();
         }
     }
-    function _init(){
-        $sql = 'DELETE FROM `tmpCategory` WHERE 1';
-        $stmt = $this-> _dbConnect ->prepare($sql);
-        $stmt ->execute();
-    }
-
+   
     /*
      * createQuary
      * @param $sql this function use for select quary that each fetch need
@@ -74,17 +69,7 @@ class convertCreoleWiki
                         (SELECT max(version) FROM `WikiPage` 
                          WHERE resourcePrimKey = a.resourcePrimKey)  
                 GROUP BY a.resourcePrimKey
-                limit 200,400";
-
-
-//
-//        $sql = "SELECT a.*, max(a.version) As ver
-//                FROM `WikiPage` AS a
-//                JOIN `WikiPageResource` AS b
-//                ON a.resourcePrimKey = b.resourcePrimKey
-//                Where a.nodeId = '41781'
-//                GROUP BY a.resourcePrimKey
-//                LIMIT 400, 600";
+                LIMIT 200,400";
 
         $stmt = $this-> _dbConnect ->prepare($sql);
         
@@ -99,7 +84,8 @@ class convertCreoleWiki
      */
     function fetchRow(){
         $this -> _creoleWikiContent = $this -> _stmt -> fetch();
-        //var_dump($this -> _creoleWikiContent);
+//        if (!isset ($this -> _creoleWikiContent -> content))
+//            var_dump($this -> _creoleWikiContent);
         
         if ($this -> _creoleWikiContent)
             return true;
@@ -164,6 +150,7 @@ class convertCreoleWiki
      *
      */
     function redirectPage(){
+            
         if ($this -> _creoleWikiContent -> redirectTitle){
             $this -> _mediaWikiContent -> content = "#تغییرمسیر" . '[[' . $this -> _creoleWikiContent -> redirectTitle . ']]';
             return TRUE;
@@ -200,9 +187,10 @@ class convertCreoleWiki
                 $tagContent .= '[[' . $tag -> name . "]] ،";
                 $this -> _mediaWikiContent -> subCategory[] = $tag -> name;
             }
+           
             $this -> _mediaWikiContent -> content = "$tagContent\n\n" . $this -> _mediaWikiContent -> content;
+
         }
-        
     }
 
     
@@ -282,7 +270,8 @@ class convertCreoleWiki
         $obj = new lyricwiki(null,null,'http://localhost/mediawiki/api.php');
 
         foreach ($this-> categorylist As $category){
-                    $obj -> addcategory ($category -> page, $category -> parent);
+                    if ($obj ->getpage($category -> page))
+                        $obj -> addcategory ($category -> page, $category -> parent);
         }
     }
 }
