@@ -72,15 +72,14 @@ class parseCreole {
      * button of content and add text of refrence in correct place in main content
      */
     function parseRefrence($content){
-        preg_match("/پي نوشت|پی نوشت(.*)/s", $content, $refrences);
-
+        preg_match("#(?s)(پي نوشت|پی‏ نوشت|پي ‏نوشت‏|پي ‏نوشت|پى ‏نوشت|پی ‏نوشت|پی نوشت)(.*)#", $content, $refrences);
         if (count($refrences) > 0 && isset ($refrences[1])){
             
             $pattern = "#(?m)^(\s+)?(\()?(\d+|×)(\))?(\.|\-|\s)(.*)$#";
-            preg_match_all ($pattern, $refrences[1], $matchesarray);
+            preg_match_all ($pattern, $refrences[2], $matchesarray);
 
             $pattern = "#(?m)^(\s+)?((\()?(\d+|×)(\))?)([\sو]+?)((\()?(\d+|×)(\))?)(\.|\-|\s)(.*)$#";
-            if (preg_match_all($pattern, $refrences[1], $matches)){
+            if (preg_match_all($pattern, $refrences[2], $matches)){
                 foreach ($matches[0] as $key => $match){
                     
                     $matchesarray[3][] = $matches[4][$key];
@@ -91,7 +90,7 @@ class parseCreole {
                 $refrences[1] = preg_replace($pattern, "", $refrences[1],1);
             }
 
-            $pattern = "/پي نوشت|پی نوشت(.*)/s";
+            $pattern = "#(?s)(پي نوشت|پی‏ نوشت|پي ‏نوشت‏|پي ‏نوشت|پى ‏نوشت|پی ‏نوشت|پی نوشت)(.*)#";
             if (preg_match($pattern, $content))
                 $text = preg_replace($pattern, "", $content);
             else
@@ -104,7 +103,7 @@ class parseCreole {
                     if (preg_match("#\(($ref)\)#", $text, $match)){
 
                         $text = str_replace($match[0], "<ref>$refContent</ref>", $text);
-                        $refrences[1] = preg_replace("#(?m)^(\s+)?(\()?($ref)(\))?(\.|\-|\s)(.*)$#", "", $refrences[1],1);
+                        $refrences[2] = preg_replace("#(?m)^(\s+)?(\()?($ref)(\))?(\.|\-|\s)(.*)$#", "", $refrences[2],1);
                     }
                     elseif(0){
                         echo "";
@@ -112,10 +111,10 @@ class parseCreole {
                 }
             }
 
-            $refrences[1] = preg_replace("#(\s|\n){2}#", "\n", $refrences[1]);
-            $refrences[1] = preg_replace("/پي نوشت|پی نوشت/", "", $refrences[1]);
+            $refrences[2] = trim($refrences[2], "\n\r");
+            $refrences[2] = preg_replace("#(?s)(پي نوشت|پی‏ نوشت|پي ‏نوشت‏|پي ‏نوشت|پى ‏نوشت|پی ‏نوشت|پی نوشت)#", "", $refrences[2]);
             
-            return $text . "==پانویس ==\n<references />" . "\n\n\n\n" . $refrences[1];
+            return $text . "==پانویس ==\n<references />" . "\n\n\n\n" . $refrences[2];
         }
         return $content;
     }
